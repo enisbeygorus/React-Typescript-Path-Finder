@@ -1,4 +1,4 @@
-![alt text](https://github.com/Enisbeygorus/React-Typescript-Path-Finder/blob/main/assets/pathImg1.png | width = 200)
+![alt text](https://github.com/Enisbeygorus/React-Typescript-Path-Finder/blob/main/assets/pathImg1.png)
 
 # Getting Started with Create React App
 
