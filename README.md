@@ -1,3 +1,5 @@
+![alt text](https://github.com/Enisbeygorus/React-Typescript-Path-Finder/blob/main/assets/pathImg1.png)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
