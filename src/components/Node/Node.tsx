@@ -3,7 +3,7 @@ import "./Node.css";
 import { useDrag, useDrop } from "react-dnd";
 
 interface NodeProps {
-  id: number
+  id: number;
   col: number;
   row: number;
   isStart: boolean;
@@ -11,7 +11,7 @@ interface NodeProps {
   isRoad: boolean;
   columnCount: number;
   wait: number;
-  shortestArray: Array<number>
+  shortestArray: Array<number>;
   changeStartAndFinishNode: (changedId: number, isStart: boolean) => void;
 }
 export const Node: React.FC<NodeProps> = ({
@@ -28,22 +28,21 @@ export const Node: React.FC<NodeProps> = ({
 }) => {
   const classStart = isStart ? "isStart" : "";
   const classFinish = isFinish ? "isFinish" : "";
-  const [isRoadNode, setIsRoadNode] = useState(isRoad)
+  const [isRoadNode, setIsRoadNode] = useState(isRoad);
 
   useEffect(() => {
     let timeOut: any;
-    if(isRoad){
+    if (isRoad) {
       timeOut = setTimeout(() => {
         setIsRoadNode(isRoad);
-      }, wait * 30)
+      }, wait * 30);
     } else {
       setIsRoadNode(isRoad);
     }
-    if(timeOut){
-      return () => clearTimeout(timeOut)
+    if (timeOut) {
+      return () => clearTimeout(timeOut);
     }
-  }, [isRoad])
-
+  }, [isRoad]);
 
   const [{ isDragging }, drag] = useDrag({
     item: {
@@ -68,24 +67,19 @@ export const Node: React.FC<NodeProps> = ({
       draggable={isStart ? true : false}
       ref={drop}
       id={`${col + row * columnCount}`}
-      className={"node " + classStart + classFinish + (isRoadNode ? 'isRoad' : '')}
+      className={
+        "node " + classStart + classFinish + (isRoadNode ? "isRoad" : "")
+      }
       data-col={col}
       data-row={row}
-      style={{position: 'relative' }}
+      style={{ position: "relative" }}
     >
-      {isStart ? (
-        <div
-          className="drag isStart"
-          ref={drag}
-        ></div>
-      ) : null}
-
-      {isFinish ? (
-        <div
-          className="drag isFinish"
-          ref={drag}
-        ></div>
-      ) : null}
+      <div
+        className={`drag isStart ${
+          isStart ? "isStart" : isFinish ? "isFinish" : null
+        }`}
+        ref={drag}
+      ></div>
     </div>
   );
 };
