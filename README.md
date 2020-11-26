@@ -1,4 +1,6 @@
-![test](https://github.com/Enisbeygorus/React-Typescript-Path-Finder/blob/main/assets/pathImg1.png =600x400)
+![test](https://github.com/Enisbeygorus/React-Typescript-Path-Finder/blob/main/assets/pathImg2.png)
+
+![test](https://github.com/Enisbeygorus/React-Typescript-Path-Finder/blob/main/assets/pathImg1.png)
 
 # Getting Started with Create React App
 
