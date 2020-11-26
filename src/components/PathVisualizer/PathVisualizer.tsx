@@ -14,6 +14,7 @@ export type NodeType = {
   isStart: boolean;
   isFinish: boolean;
   isRoad: boolean;
+  isSearched: boolean;
   wait: number;
 };
 
@@ -74,6 +75,7 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
           isRoad: false,
           id: coordinateToId(i, j, columnCount),
           wait: 0,
+          isSearched: false
         });
       }
       nodes.push(row);
@@ -93,7 +95,6 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
   }, [shortestArray]);
 
   const changeStartAndFinishNode = (changedId: number, isStart: boolean) => {
-    let isStartNodeChanged = false;
     if (
       (isStart && changedId !== finishNodeId) ||
       (!isStart && changedId !== startNodeId)
@@ -103,17 +104,16 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
           const id = coordinateToId(rowObj.row, rowObj.col, columnCount);
           if (isStart) {
             if (id === changedId) {
-              isStartNodeChanged = true;
               setStartNode(changedId);
-              return { ...rowObj, isRoad: false, isStart: true };
+              return { ...rowObj, isRoad: false, isStart: true, isSearched: false };
             }
-            return { ...rowObj, isRoad: false, isStart: false };
+            return { ...rowObj, isRoad: false, isStart: false, isSearched: false };
           } else {
             if (id === changedId) {
               setFinishNode(changedId);
-              return { ...rowObj, isRoad: false, isFinish: true };
+              return { ...rowObj, isRoad: false, isFinish: true, isSearched: false };
             }
-            return { ...rowObj, isRoad: false, isFinish: false };
+            return { ...rowObj, isRoad: false, isFinish: false, isSearched: false };
           }
         });
       });
@@ -122,10 +122,31 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
   };
 
   const findTheShortestPathHandler = () => {
-    const parents = DijkstraAlgorithm(adjacenyMatrix, startNodeId);
+    const {parent, processedOrder} = DijkstraAlgorithm(adjacenyMatrix, startNodeId, finishNodeId);
     const shortestArrayNew: Array<number> = [];
-    fillShortestArray(parents, finishNodeId, shortestArrayNew);
+    searchVisualizer(processedOrder);
+    setTimeout(() => {
+      fillShortestArray(parent, finishNodeId, shortestArrayNew);
+    }, processedOrder.length * 30)
   };
+
+  const searchVisualizer = (processedOrder: Array<number>) => {
+    const newNodes = nodes.map((row) => {
+      return row.map((rowObj) => {
+        const index = processedOrder.indexOf(rowObj.id);
+        const isSearched = index === -1 ? false : true;
+        const wait = index === -1 ? 0 : index;
+
+        return {
+          ...rowObj,
+          isSearched,
+          wait,
+        };
+      });
+    });
+
+    setNodes(newNodes);
+  }
 
   const drawRoadFromStartToFinish = (shortestPath: Array<number>) => {
     const newNodes = nodes.map((row) => {
@@ -197,6 +218,7 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
                       isStart={node.isStart}
                       isFinish={node.isFinish}
                       isRoad={node.isRoad}
+                      isSearched={node.isSearched}
                       columnCount={columnCount}
                       shortestArray={shortestArray}
                       wait={node.wait}

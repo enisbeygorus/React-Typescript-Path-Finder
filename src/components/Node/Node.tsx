@@ -9,6 +9,7 @@ interface NodeProps {
   isStart: boolean;
   isFinish: boolean;
   isRoad: boolean;
+  isSearched: boolean;
   columnCount: number;
   wait: number;
   shortestArray: Array<number>;
@@ -23,12 +24,14 @@ export const Node: React.FC<NodeProps> = ({
   isRoad,
   wait,
   columnCount,
+  isSearched,
   shortestArray,
   changeStartAndFinishNode,
 }) => {
   const classStart = isStart ? "isStart" : "";
   const classFinish = isFinish ? "isFinish" : "";
   const [isRoadNode, setIsRoadNode] = useState(isRoad);
+  const [isSearchedNode, setIsSearchedNode] = useState(isSearched);
 
   useEffect(() => {
     let timeOut: any;
@@ -39,10 +42,18 @@ export const Node: React.FC<NodeProps> = ({
     } else {
       setIsRoadNode(isRoad);
     }
+
+    if (isSearched) {
+      timeOut = setTimeout(() => {
+        setIsSearchedNode(isSearched);
+      }, wait * 30);
+    } else {
+      setIsSearchedNode(isSearched);
+    }
     if (timeOut) {
       return () => clearTimeout(timeOut);
     }
-  }, [isRoad]);
+  }, [isRoad, isSearched]);
 
   const [{ isDragging }, drag] = useDrag({
     item: {
@@ -68,18 +79,15 @@ export const Node: React.FC<NodeProps> = ({
       ref={drop}
       id={`${col + row * columnCount}`}
       className={
-        "node " + classStart + classFinish + (isRoadNode ? "isRoad" : "")
+        "node " + classStart + classFinish + (isRoadNode ? "isRoad" : "") + (isSearchedNode ? " isSearched" : "")
       }
       data-col={col}
       data-row={row}
       style={{ position: "relative" }}
     >
-      <div
-        className={`drag isStart ${
-          isStart ? "isStart" : isFinish ? "isFinish" : null
-        }`}
-        ref={drag}
-      ></div>
+      {isStart ? <div className="drag isStart" ref={drag}></div> : null}
+
+      {isFinish ? <div className="drag isFinish" ref={drag}></div> : null}
     </div>
   );
 };
