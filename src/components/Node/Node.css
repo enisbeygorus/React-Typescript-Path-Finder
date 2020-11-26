@@ -1,0 +1,26 @@
+.node {
+    width: 25px;
+    height: 25px;
+    border: 1px solid #a4a4a4;
+    position: relative;
+}
+
+.isStart {
+    background-color: green;
+}
+
+.isFinish {
+    background-color: red;
+}
+
+.isRoad {
+    background-color: yellow;
+}
+
+.drag {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
