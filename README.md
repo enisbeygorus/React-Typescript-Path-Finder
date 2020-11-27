@@ -1,6 +1,4 @@
-![test](https://github.com/Enisbeygorus/React-Typescript-Path-Finder/blob/main/assets/pathImg2.png)
-
-![test](https://github.com/Enisbeygorus/React-Typescript-Path-Finder/blob/main/assets/pathImg1.png)
+![test](https://github.com/Enisbeygorus/React-Typescript-Path-Finder/blob/main/assets/pathGif.gif)
 
 # Getting Started with Create React App
 
