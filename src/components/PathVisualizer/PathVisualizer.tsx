@@ -37,8 +37,19 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
   const [startNodeId, setStartNode] = useState<number>(6);
   const [finishNodeId, setFinishNode] = useState<number>(22);
 
-  const rowCount = 15;
-  const columnCount = 20;
+  const [canClickFindPathButton, setCanClickFindPathButton] = useState<boolean>(
+    true
+  );
+
+  const [nodePositionChanged, setNodePositionChanged] = useState<boolean>(
+    false
+  );
+  const [onAnimation, setOnAnimation] = useState<boolean>(false);
+
+  const [timer, setTimer] = useState<any>(() => {});
+
+  const rowCount = 20;
+  const columnCount = 25;
 
   const createAdjacenyMatrix = () => {
     for (let i = 0; i < rowCount * columnCount; i++) {
@@ -75,7 +86,7 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
           isRoad: false,
           id: coordinateToId(i, j, columnCount),
           wait: 0,
-          isSearched: false
+          isSearched: false,
         });
       }
       nodes.push(row);
@@ -94,7 +105,17 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
     };
   }, [shortestArray]);
 
+  useEffect(() => {
+    if (nodePositionChanged && onAnimation) {
+      clearTimeout(timer);
+    }
+    return () => {
+      // removing the listener when props.x changes
+    };
+  }, [nodePositionChanged]);
+
   const changeStartAndFinishNode = (changedId: number, isStart: boolean) => {
+    setNodePositionChanged(true);
     if (
       (isStart && changedId !== finishNodeId) ||
       (!isStart && changedId !== startNodeId)
@@ -104,30 +125,64 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
           const id = coordinateToId(rowObj.row, rowObj.col, columnCount);
           if (isStart) {
             if (id === changedId) {
+              setCanClickFindPathButton(true);
               setStartNode(changedId);
-              return { ...rowObj, isRoad: false, isStart: true, isSearched: false };
+              return {
+                ...rowObj,
+                isRoad: false,
+                isStart: true,
+                isSearched: false,
+              };
             }
-            return { ...rowObj, isRoad: false, isStart: false, isSearched: false };
+            return {
+              ...rowObj,
+              isRoad: false,
+              isStart: false,
+              isSearched: false,
+            };
           } else {
             if (id === changedId) {
+              setCanClickFindPathButton(true);
               setFinishNode(changedId);
-              return { ...rowObj, isRoad: false, isFinish: true, isSearched: false };
+              return {
+                ...rowObj,
+                isRoad: false,
+                isFinish: true,
+                isSearched: false,
+              };
             }
-            return { ...rowObj, isRoad: false, isFinish: false, isSearched: false };
+            return {
+              ...rowObj,
+              isRoad: false,
+              isFinish: false,
+              isSearched: false,
+            };
           }
         });
       });
+      setNodePositionChanged(false);
       setNodes(newNodes);
     }
   };
 
   const findTheShortestPathHandler = () => {
-    const {parent, processedOrder} = DijkstraAlgorithm(adjacenyMatrix, startNodeId, finishNodeId);
+    setCanClickFindPathButton(false);
+
+    const { parent, processedOrder } = DijkstraAlgorithm(
+      adjacenyMatrix,
+      startNodeId,
+      finishNodeId
+    );
     const shortestArrayNew: Array<number> = [];
     searchVisualizer(processedOrder);
-    setTimeout(() => {
+    setOnAnimation(true);
+    const timerOut = setTimeout(() => {
       fillShortestArray(parent, finishNodeId, shortestArrayNew);
-    }, processedOrder.length * 30)
+      setCanClickFindPathButton(true);
+      setOnAnimation(false);
+    }, processedOrder.length * 30);
+
+    setTimer(timerOut);
   };
 
   const searchVisualizer = (processedOrder: Array<number>) => {
@@ -146,7 +201,7 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
     });
 
     setNodes(newNodes);
-  }
+  };
 
   const drawRoadFromStartToFinish = (shortestPath: Array<number>) => {
     const newNodes = nodes.map((row) => {
@@ -182,7 +237,7 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div>
+      <div className="container">
         <div style={{ textAlign: "center", marginBottom: "50px" }}>
           You can Drag And Drop Both Start and Finish node
         </div>
@@ -198,12 +253,16 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
           <div>Finish Node</div>
           <div className="node isFinish"></div>
         </div>
-        <button
-          onClick={findTheShortestPathHandler}
-          style={{ marginBottom: "50px", width: "100%" }}
-        >
-          Find the shortest path
-        </button>
+        <div className="button-wrapper">
+          <button
+            className="btn"
+            disabled={!canClickFindPathButton}
+            onClick={findTheShortestPathHandler}
+            style={{ marginBottom: "50px", width: "100%" }}
+          >
+            Find the shortest path
+          </button>
+        </div>
         <div className="path-visualize">
           {nodes.map((row, index) => {
             return (

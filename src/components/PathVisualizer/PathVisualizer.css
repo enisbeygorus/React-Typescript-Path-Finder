@@ -1,3 +1,31 @@
 .row {
     display: flex;
 }
+
+.btn {
+    cursor: pointer;
+    margin-bottom: 50px;
+    width: 100%;
+    background-color: #19ea72;
+    border: 1px solid #19ea72;
+    height: 40px;
+    max-width: 200px;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    outline: none;
+}
+
+.btn:disabled {
+    cursor: initial;
+    background: slategray;
+    border-color: slategray;
+
+}
+
+
+.button-wrapper {
+    display: flex;
+    justify-content: center;
+}

@@ -50,9 +50,17 @@ export const Node: React.FC<NodeProps> = ({
     } else {
       setIsSearchedNode(isSearched);
     }
+
+    if(isRoad && isSearched) {
+      setTimeout(() => {
+        setIsSearchedNode(false);
+      }, wait * 30)
+    }
+
     if (timeOut) {
       return () => clearTimeout(timeOut);
     }
+    
   }, [isRoad, isSearched]);
 
   const [{ isDragging }, drag] = useDrag({
@@ -63,7 +71,7 @@ export const Node: React.FC<NodeProps> = ({
     },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
-    }),
+    })
   });
 
   const [collectedPropsDrop, drop] = useDrop({
@@ -88,6 +96,8 @@ export const Node: React.FC<NodeProps> = ({
       {isStart ? <div className="drag isStart" ref={drag}></div> : null}
 
       {isFinish ? <div className="drag isFinish" ref={drag}></div> : null}
+
+      {!isStart ? (!isFinish ? <div className={(isSearchedNode ? " circle" : "")} ></div> : null ): null }
     </div>
   );
 };

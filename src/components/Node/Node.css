@@ -1,12 +1,12 @@
 .node {
-    width: 25px;
-    height: 25px;
-    border: 1px solid #a4a4a4;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #c3c3c36b;
     position: relative;
 }
 
 .isStart {
-    background-color: green;
+    background-color:#19ea72;
 }
 
 .isFinish {
@@ -17,13 +17,39 @@
     background-color: yellow;
 }
 
-.isSearched {
+/* .isSearched {
     background-color: rgb(71, 71, 191);
-}
+} */
 
 .isRoad.isSearched {
     background-color: yellow;
 }
+
+.circle {
+    background: #00dcff;
+    width: 20px;
+    height: 20px;
+    margin: auto;
+    overflow: hidden;
+    -webkit-animation:grow 2s;
+    animation:grow 2s;
+    position: absolute;
+    top: 0;
+}
+
+@keyframes grow {
+    0% {
+   -webkit-transform: scale( 0 );-moz-transform: scale( 0 );-o-transform: scale( 0 );-ms-transform: scale( 0 );transform: scale( 0 );
+   border-radius: 100%;
+   background: blue;
+     }
+     
+     100% {
+     -webkit-transform: scale( 1 );-moz-transform: scale( 1 );-o-transform: scale( 1 );-ms-transform: scale( 1 );transform: scale( 1 );
+     border-radius: 0;
+     background: #00dcff;
+     }
+   }
 
 .drag {
     width: 100%;

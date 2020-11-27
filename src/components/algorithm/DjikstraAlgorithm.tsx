@@ -41,7 +41,6 @@ export const DijkstraAlgorithm = (graph: Array<Array<number>>, startNodeId: numb
                     value[j] = value[u] + graph[u][j];
                     parent[j] = u;
                     if(u == finishNodeId){
-                        console.log('found it ', u , '----', finishNodeId);
                         shouldBreak = true;
                         break;
                     }
@@ -49,8 +48,6 @@ export const DijkstraAlgorithm = (graph: Array<Array<number>>, startNodeId: numb
         }
     }
     processedOrder.shift();
-    console.log(processedOrder)
-    console.log(processed)
 
     return {parent, processedOrder};
 }
