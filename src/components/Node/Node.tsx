@@ -9,10 +9,14 @@ interface NodeProps {
   isStart: boolean;
   isFinish: boolean;
   isRoad: boolean;
+  isWall: boolean;
   isSearched: boolean;
+  isMouseDown: boolean;
   columnCount: number;
   wait: number;
   shortestArray: Array<number>;
+  wallNodes: Array<number>;
+  setWallHandler: (id: number) => void;
   changeStartAndFinishNode: (changedId: number, isStart: boolean) => void;
 }
 export const Node: React.FC<NodeProps> = ({
@@ -25,13 +29,20 @@ export const Node: React.FC<NodeProps> = ({
   wait,
   columnCount,
   isSearched,
+  isWall,
   shortestArray,
+  wallNodes,
+  setWallHandler,
+  isMouseDown,
   changeStartAndFinishNode,
 }) => {
   const classStart = isStart ? "isStart" : "";
   const classFinish = isFinish ? "isFinish" : "";
+  const classWall = isWall ? "isWall" : "";
+
   const [isRoadNode, setIsRoadNode] = useState(isRoad);
   const [isSearchedNode, setIsSearchedNode] = useState(isSearched);
+  const [isWallNode, setIsWallNode] = useState(false);  
 
   useEffect(() => {
     let timeOut: any;
@@ -52,16 +63,27 @@ export const Node: React.FC<NodeProps> = ({
     }
 
     if(isRoad && isSearched) {
-      setTimeout(() => {
+      timeOut = setTimeout(() => {
         setIsSearchedNode(false);
       }, wait * 30)
+    }
+
+    if(!isWall){
+      setIsWallNode(false);
+    }
+
+    if(isWall) {
+      timeOut = setTimeout(() => {
+        setIsWallNode(true);
+      }, wait * 10)
     }
 
     if (timeOut) {
       return () => clearTimeout(timeOut);
     }
+
     
-  }, [isRoad, isSearched]);
+  }, [isRoad, isSearched, isWall]);
 
   const [{ isDragging }, drag] = useDrag({
     item: {
@@ -81,17 +103,43 @@ export const Node: React.FC<NodeProps> = ({
     },
   });
 
+  const mouseOverHandler = () => {
+    if(isMouseDown){
+      if(!isWallNode){
+        setIsWallNode(true);
+        setWallHandler(id);
+      } else {
+        setIsWallNode(false);
+        setWallHandler(id);
+      }
+    }
+  }
+
+  const mouseClickHandler = () => {
+    if(!isWallNode) {
+      if(!isStart && !isFinish){
+        setIsWallNode(true);
+        setWallHandler(id);
+      }
+    } else {
+      setIsWallNode(false);
+      setWallHandler(id);
+    }
+  }
+
   return (
     <div
-      draggable={isStart ? true : false}
+      draggable={isStart ? "true" : "false"}
       ref={drop}
       id={`${col + row * columnCount}`}
       className={
-        "node " + classStart + classFinish + (isRoadNode ? "isRoad" : "") + (isSearchedNode ? " isSearched" : "")
+        "node " + classStart + classFinish + (isRoadNode ? "isRoad" : "") + (isSearchedNode ? " isSearched" : "") + (isWallNode ? " isWall" : "")
       }
       data-col={col}
       data-row={row}
       style={{ position: "relative" }}
+      onMouseOver={mouseOverHandler}
+      onClick={mouseClickHandler}
     >
       {isStart ? <div className="drag isStart" ref={drag}></div> : null}
 
