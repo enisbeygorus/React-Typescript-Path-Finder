@@ -64,11 +64,7 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
 
       setPaintSearchedDone(false);
     }
-
-    if(shortestPathArray){
-      console.log('shortestPathArray: changed', shortestPathArray)
-    }
-  }, [paintSearchedDone, nodes, processedOrderArr.length, shortestPathArray]);
+  }, [paintSearchedDone, nodes, processedOrderArr.length]);
 
   useEffect(() => {
     if (nodesCleared && startAnimation) {
@@ -104,8 +100,7 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
       return ;
     }
     const shortestPath = createShortestArray(parent, finishNodeId);
-    console.log(shortestPath)
-    console.log(shortestPath.length)
+
     setShortestPathArray(shortestPath);
     setAdjacenyMatrix(createdAdjacenyMatrix);
   }
@@ -121,12 +116,7 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
       wallNodes
     );
 
-    console.log(wallNodes)
-    console.log(changedId)
-    console.log(wallNodes.indexOf(changedId))
-
     if (nodeType === "startNode" && changedId !== finishNodeId && wallNodes.indexOf(changedId) === -1) {
-      console.log('here')
       setStartNode(changedId);
     }
 
