@@ -2,36 +2,49 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
 }
 
 .row {
     display: flex;
 }
 
+.btn-wrapper {
+    display: flex;
+    justify-content: space-around;
+}
+
 .btn {
     cursor: pointer;
-    margin-bottom: 50px;
     width: 100%;
-    background-color: #19ea72;
-    border: 1px solid #19ea72;
     height: 40px;
-    max-width: 200px;
-    border-radius: 20px;
+    max-width: 185px;
+    border-radius: 5px;
     color: #fff;
     font-size: 16px;
     font-weight: bold;
     outline: none;
+    background-color: #00dcff;
+    border: 1px solid #00dcff;
 }
+
+.btn:hover {
+    background-color: blue;
+}
+
+.btn.find-path {
+    background-color: #19ea72;
+    border: 1px solid #19ea72;
+}
+
+.btn.find-path:hover {
+    background-color: #17964e;
+}
+
 
 .btn:disabled {
     cursor: initial;
     background: slategray;
     border-color: slategray;
 
-}
-
-
-.button-wrapper {
-    display: flex;
-    justify-content: center;
 }

@@ -123,11 +123,20 @@ export const changeStartAndFinishNodeHelper = (
   changedId: number,
   nodeType: string,
   startNodeId: number,
-  finishNodeId: number
+  finishNodeId: number,
+  wallNodes: Array<number>
 ) => {
   const newNodes = nodes.map((row, i) => {
     return row.map((nodeObj, j) => {
+
+      if(wallNodes.indexOf(changedId) !== -1){
+        return {
+          ...nodeObj
+        }
+      }
+
       if (j + i * columnCount === changedId) {
+        console.log(wallNodes.indexOf(changedId))
         if (nodeType === "startNode" && finishNodeId !== changedId) {
           return {
             ...nodeObj,
@@ -263,6 +272,19 @@ export const clearPaintedNodesHelper = (row: Array<NodeType>) => {
 
 export const clearPaintedNodes = (nodes: Array<Array<NodeType>>) => {
   const newNodes = nodes.map(clearPaintedNodesHelper);
+  return newNodes;
+};
 
+export const clearWallNodesHelper = (row: Array<NodeType>) => {
+  return row.map((nodeObj) => {
+    return {
+      ...nodeObj,
+      isWall: false,
+    };
+  });
+};
+
+export const clearWallNodes = (nodes: Array<Array<NodeType>>) => {
+  const newNodes = nodes.map(clearWallNodesHelper);
   return newNodes;
 };

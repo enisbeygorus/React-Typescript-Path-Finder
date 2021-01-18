@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Node, NodeType } from "../Node/Node";
+import { Header } from '../Header/Header';
 import "./PathVisualizer.css";
 import {
   initMatrix,
@@ -12,7 +13,7 @@ import {
 } from "./pathVisualizerHelper";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { DijkstraAlgorithm } from "../algorithm/DjikstraAlgorithm";
+import { DijkstraAlgorithm } from "../../algorithm/DjikstraAlgorithm";
 
 interface PathVisualizerProps {}
 
@@ -23,13 +24,13 @@ export type coordinateType = {
 };
 
 export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
-  const rowCount = 15;
-  const columnCount = 20;
+  const rowCount = 12;
+  const columnCount = 16;
 
   const [nodes, setNodes] = useState<Array<Array<NodeType>>>([]);
 
-  const [startNodeId, setStartNode] = useState<number>(2);
-  const [finishNodeId, setFinishNode] = useState<number>(8);
+  const [startNodeId, setStartNode] = useState<number>(83);
+  const [finishNodeId, setFinishNode] = useState<number>(92);
   const [adjacenyMatrix, setAdjacenyMatrix] = useState<Array<Array<number>>>(
     []
   );
@@ -63,6 +64,10 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
 
       setPaintSearchedDone(false);
     }
+
+    if(shortestPathArray){
+      console.log('shortestPathArray: changed', shortestPathArray)
+    }
   }, [paintSearchedDone, nodes, processedOrderArr.length, shortestPathArray]);
 
   useEffect(() => {
@@ -90,41 +95,42 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
       startNodeId,
       finishNodeId
     );
-    const shortestPath = createShortestArray(parent, finishNodeId);
 
     setProcessedOrderArr(processedOrder);
+
+    const parentKeys = Object.keys(parent);
+    if(parentKeys.indexOf(finishNodeId.toString()) === -1 ){
+      setShortestPathArray([]);
+      return ;
+    }
+    const shortestPath = createShortestArray(parent, finishNodeId);
+    console.log(shortestPath)
+    console.log(shortestPath.length)
     setShortestPathArray(shortestPath);
     setAdjacenyMatrix(createdAdjacenyMatrix);
   }
 
   const changeStartAndFinishNode = (changedId: number, nodeType: string) => {
-    const { parent, processedOrder } =
-      nodeType === "startNode"
-        ? DijkstraAlgorithm(adjacenyMatrix, changedId, finishNodeId)
-        : DijkstraAlgorithm(adjacenyMatrix, startNodeId, changedId);
-
     const newNodes = changeStartAndFinishNodeHelper(
       nodes,
       columnCount,
       changedId,
       nodeType,
       startNodeId,
-      finishNodeId
+      finishNodeId,
+      wallNodes
     );
 
-    if (nodeType === "startNode" && changedId !== finishNodeId) {
-      const shortestPath = createShortestArray(parent, finishNodeId);
+    console.log(wallNodes)
+    console.log(changedId)
+    console.log(wallNodes.indexOf(changedId))
 
-      setShortestPathArray(shortestPath);
-      setProcessedOrderArr(processedOrder);
+    if (nodeType === "startNode" && changedId !== finishNodeId && wallNodes.indexOf(changedId) === -1) {
+      console.log('here')
       setStartNode(changedId);
     }
 
-    if (nodeType === "finishNode" && changedId !== startNodeId) {
-      const shortestPath = createShortestArray(parent, changedId);
-
-      setShortestPathArray(shortestPath);
-      setProcessedOrderArr(processedOrder);
+    if (nodeType === "finishNode" && changedId !== startNodeId && wallNodes.indexOf(changedId) === -1) {
       setFinishNode(changedId);
     }
 
@@ -135,30 +141,41 @@ export const PathVisualizer: React.FC<PathVisualizerProps> = () => {
     const newNodes = clearPaintedNodes(nodes);
 
     setNodes(newNodes);
+    setShortestPathArray([]);
     setNodesCleared(true);
   };
 
   const findShortestPathButton = () => {
-    createAdjacenyMatrixAndFindShortestPath()
-
     clearPaintedNodesControl();
+    
+    createAdjacenyMatrixAndFindShortestPath()
     setDisableButtonAndDrag(true);
     setStartAnimation(true);
   };
 
+  const clearWallNodesButton = () => {
+    setWallNodes([]);
+  }
+
+  const clearPaintedNodesButton = () => {
+    clearPaintedNodesControl();
+  }
+
+  const clearAllNodesButton = () => {
+    clearPaintedNodesControl();
+    clearWallNodesButton();
+  }
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="path-visualize">
-        <button
-          className="btn"
-          disabled={disableButtonAndDrag}
-          onClick={() => {
-            findShortestPathButton();
-          }}
-          style={{ marginBottom: "50px", width: "100%" }}
-        >
-          Find the shortest path
-        </button>
+        <Header
+          disableButtonAndDrag={disableButtonAndDrag}
+          findShortestPathButton={findShortestPathButton}
+          clearWallNodesButton={clearWallNodesButton}
+          clearPaintedNodesButton={clearPaintedNodesButton}
+          clearAllNodesButton={clearAllNodesButton}
+        />
         <div
         onMouseDown={mouseDownHandler}
         onMouseUp={mouseUpHandler}

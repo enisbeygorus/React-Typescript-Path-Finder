@@ -78,8 +78,16 @@ export const Node: React.FC<NodeProps> = ({
       setIsSearchedNode(isSearched);
     }
 
+    setIsWallNode(false);
+
+    wallNodes.forEach((wallNodeId) => {
+      if(wallNodeId === coordinateToId(row, col, columnCount)) {
+        setIsWallNode(true);
+      }
+    })
+
     return () => clearTimeout(timeOut);
-  }, [isRoad, isSearched, wait]);
+  }, [isRoad, isSearched, wait, isWall, wallNodes]);
 
   const [{ }, drag] = useDrag({
     item: {
@@ -111,11 +119,9 @@ export const Node: React.FC<NodeProps> = ({
     const nodeId = coordinateToId(row, col, columnCount);
     if (isWallNode) {
       const newWallNodes = removeNodeToWallNodeArray(wallNodes, nodeId);
-      setIsWallNode(false);
       setWallNodes(newWallNodes);
     } else {
       const newWallNodes = addNodeToWallNodeArray(wallNodes, nodeId);
-      setIsWallNode(true);
       setWallNodes(newWallNodes);
     }
   }

@@ -1,0 +1,36 @@
+.header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5vh;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+}
+
+.description-info {
+    margin-bottom: 5vh;
+    align-self: center;
+}
+
+.description-node {
+    display: flex;
+    justify-content: space-around;
+}
+
+.warning-wrapper {
+    height: 50px;
+}
+
+.warning {
+  background: #fff;
+  overflow: hidden;
+  color: #000;   
+  line-height: 50px;
+
+  transition: all .5s ease-in-out;
+  height: 0;
+}
+
+.warning.show{
+    height: 50px;
+}
