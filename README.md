@@ -16,7 +16,13 @@ I try to create this path finding project own my on without looking how it's don
 
 You need to download node.js. Currently i am using version 12.18.4
 
-In the project directory, you can run:
+After downloading node.js in the root first you need to run:
+
+### `npm install`
+
+to install all the packages.
+
+After installing all the packages again in the project directory, you can run:
 
 ### `yarn start`
 
