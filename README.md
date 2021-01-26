@@ -10,6 +10,19 @@ https://www.youtube.com/watch?v=n4t_-NjY_Sg&t=846s
 
 I try to create this path finding project own my on without looking how it's done.
 
+## What you can do after open project ?
+
+You can change the Start Node (Green Node) and End Node (Red Node) by drag and drop.
+After changing the nodes you can click "Find the shortest path" button to see how Djikstra Algorithm scan the nodes
+and find the shortest path.
+
+# Updated
+
+Added Wall Node (Black Node).
+By clicking empty node you can add wall node to empty node or while keep pressing mouse and moving
+over on nodes you can also add wall nodes. With wall nodes we can block the ways that we want. So we can
+change the shortest path with wall nodes.
+
 # Getting Started with Project
 
 ## How can you run the project ?
