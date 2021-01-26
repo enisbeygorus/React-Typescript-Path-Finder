@@ -12,11 +12,11 @@ I try to create this path finding project own my on without looking how it's don
 
 ## What you can do after open project ?
 
-You can change the Start Node (Green Node) and End Node (Red Node) by drag and drop.
+You can change the Start Node (Green Node) and Finish Node (Red Node) by drag and drop.
 After changing the nodes you can click "Find the shortest path" button to see how Djikstra Algorithm scan the nodes
 and find the shortest path.
 
-# Updated
+## Updated
 
 Added Wall Node (Black Node).
 By clicking empty node you can add wall node to empty node or while keep pressing mouse and moving
